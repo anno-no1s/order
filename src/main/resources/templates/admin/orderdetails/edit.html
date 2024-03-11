@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+  <head>
+    <meta charset="UTF-8" th:remove="tag">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <form th:action="@{/admin/orderdetails/edit/{id}(id=*{id})}" th:object="${orderDetail}" method="post">
+        <ul th:if="${#fields.hasErrors()}" class="alert alert-danger" role="alert">
+          <li th:each="err : ${#fields.errors('*')}">
+            <span th:text="${err}"></span>
+          </li>
+        </ul>
+        <h1 class="page-header">受注詳細編集</h1>
+        <div class="form-group">
+          <label for="product">商品</label>
+          <select class="form-control" th:field="*{product}">
+            <th:block th:each="product : ${@productRepository.findAll()}">
+              <option th:value="${product.id}" th:text="${product.name}"></option>
+            </th:block>
+          </select>
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('unit')} ? error">
+          <label for="unit">数量</label>
+          <input class="form-control" type="text" id="unit" th:field="*{unit}">
+        </div>
+      	<div>
+          <input class="btn btn-primary" type="submit" value="更新">
+      	</div>
+      </form>
+    </div>
+  </body>
+</html>
